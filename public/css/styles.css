@@ -1,18 +1,23 @@
-html {
+/* html {
   background-color: #e4e9fd;
   background-image: -webkit-linear-gradient(65deg, #a683e3 50%, #e4e9fd 50%);
   min-height: 100%;
   font-family: "helvetica neue";
-}
+} */
 
 body {
-  background-color: transparent;
+  /* min-height: 100%;
+  background-color: transparent; */
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-h1 {
+/* h1 {
   color: #fff;
   padding: 10px;
-}
+} */
 
 .box {
   max-width: 400px;
@@ -73,7 +78,7 @@ button.addNewItem {
   border-width: 0;
 }
 
-input[type="text"] {
+#addNewItem {
   text-align: center;
   height: 60px;
   top: 10px;
@@ -84,7 +89,7 @@ input[type="text"] {
   width: 313px;
 }
 
-input[type="text"]:focus {
+#addNewItem:focus {
   outline: none;
   box-shadow: inset 0 -3px 0 0 #a683e3;
 }
@@ -98,4 +103,219 @@ footer {
   color: white;
   color: rgba(0, 0, 0, 0.5);
   text-align: center;
+}
+
+.listsMenuBar {
+  height: 100%;
+  width: 25%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.listsMenuBar > div {
+  border: 1px solid black;
+  width: 80%;
+}
+
+.authentication-form {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 50px double white;
+  box-sizing: border-box;
+  background-color: #a683e3;
+  background-image: url("https://www.transparenttextures.com/patterns/diagmonds.png");
+}
+
+.card {
+  max-height: 90%;
+  width: 40%;
+  background-color: white;
+  /* border-radius: 12px; */
+  box-shadow: 0 12px 18px rgba(0, 0, 0, 0.26);
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: lightgrey;
+  border-radius: 2px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #675686;
+}
+
+.card > p {
+  text-align: center;
+}
+
+.myToDOListHeading {
+  color: #675686;
+  text-align: center;
+  font-family: Satisfy, cursive;
+}
+
+.control {
+  margin: 1rem 0;
+  display: flex;
+  /* align-items: stretch; */
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.control label,
+.control input {
+  display: inline;
+}
+
+.control > label {
+  font-weight: bold;
+  color: #464646;
+  margin-bottom: 0.5rem;
+  width: 37%;
+  font-size: 1.2rem;
+}
+
+.control > input {
+  /* flex-grow: 1; */
+  font: inherit;
+  padding: 0.35rem 0.35rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 67%;
+}
+
+.control > input:focus {
+  outline: none;
+  border-color: #4f005f;
+  background: #f6dbfc;
+}
+
+.control button {
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 200px;
+  min-height: 50px;
+  border-radius: 20px;
+  box-shadow: 0 1rem 1rem rgb(0 0 0 / 18%);
+  border: none;
+  background-color: #675686;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.control button:active {
+  box-shadow: none;
+  border: none;
+}
+
+@media (max-width: 1100px) {
+  .authentication-form {
+    border: 30px double white;
+  }
+  .card {
+    width: 60%;
+  }
+}
+
+@media (max-width: 870px) {
+  .authentication-form,#homepage {
+    border: 10px double white;
+  }
+  .card {
+    width: 75%;
+  }
+}
+
+@media (max-width: 600px) {
+  .card {
+    width: 90%;
+    max-height: 80%;
+  }
+
+  .myToDOListHeading {
+    font-size: 2rem;
+  }
+
+  .control {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .control > label,
+  .control > input {
+    width: 100%;
+  }
+}
+
+#homepage {
+  height: 100vh;
+  width: 100%;
+  border: 50px double white;
+  box-sizing: border-box;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #675686;
+  background-image: url("https://www.transparenttextures.com/patterns/food.png");
+/* background-color: #675686;
+background-image: url("https://www.transparenttextures.com/patterns/basketball.png"); */
+/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+}
+
+#homepage-text{
+  color:White;
+  margin:70px;
+    background-color:#675686;
+
+    padding:20px
+
+}
+
+#homepage-text div{
+  font-weight: bold;
+  text-align: center;
+}
+
+#welcome {
+  font-family:Sofia, satisfy, cursive;
+  font-size:2em;
+}
+
+#to{
+  font-family:"Reggae One", "Dancing Script";
+  font-size:1em;
+}
+
+#myToDoList{
+  font-family:"Dancing Script", "Reggae One";
+  font-size:2.5em;
+}
+
+#main-lists-page{
+  height: 100vh;
+  width: 100%;
+  background-color: #675686;
 }
