@@ -8,29 +8,21 @@
 body {
   /* min-height: 100%;
   background-color: transparent; */
-  min-height: 100vh;
+  max-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+button{
+  border:none;
+  outline:none
 }
 
 /* h1 {
   color: #fff;
   padding: 10px;
 } */
-
-.box {
-  max-width: 400px;
-  margin: 50px auto;
-  background: white;
-  border-radius: 5px;
-  box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
-}
-
-#heading {
-  background-color: #a683e3;
-  text-align: center;
-}
 
 .item {
   min-height: 70px;
@@ -65,7 +57,8 @@ form.item {
   margin-left: 20px;
 }
 
-button.addNewItem {
+button.addNewItem,
+#newListForm > button {
   min-height: 50px;
   width: 50px;
   border-radius: 50%;
@@ -89,7 +82,8 @@ button.addNewItem {
   width: 313px;
 }
 
-#addNewItem:focus {
+#addNewItem:focus,
+#newListForm > input:focus {
   outline: none;
   box-shadow: inset 0 -3px 0 0 #a683e3;
 }
@@ -105,19 +99,95 @@ footer {
   text-align: center;
 }
 
-.listsMenuBar {
-  height: 100%;
-  width: 25%;
+#main-lists-page {
+  max-height: 100vh;
+  width: 100%;
+  background-color: #675686;
+  display: flex;
+  justify-content: space-between;
+}
+
+#all-lists-section {
   background-color: white;
+  min-width: 20%;
+  min-height: 100vh;
+}
+
+.listsMenuBar {
+  min-height: 90vh;
+  max-height: 90vh;
+  min-width: 20%;
+  background-color: white;
+  box-shadow: 0 12px 18px rgba(0, 0, 0, 0.26);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  overflow-y: auto;
+  position: absolute;
 }
 
-.listsMenuBar > div {
-  border: 1px solid black;
-  width: 80%;
+.listsMenuBar > a {
+  margin: 2px;
+  box-shadow: 0 12px 18px rgba(0, 0, 0, 0.16);
+  padding: 10px;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-family: "Reggae One", "Dancing Script";
+  color:#675686;
+  text-align:center;
+}
+
+.listsMenuBar > a:active {
+  box-shadow: none;
+  border: none;
+}
+
+#newListForm {
+  z-index: 1;
+  position: fixed;
+  width: 20%;
+  margin-top: 90vh;
+}
+
+#newListForm > input {
+  text-align: center;
+  height: 60px;
+  top: 10px;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  font-weight: 200;
+  width: 75%;
+}
+
+.box {
+  min-width: 400px;
+  max-width: 400px;
+  /* margin: 50px auto; */
+  background: white;
+  border-radius: 5px;
+  box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
+}
+
+#open-list-section {
+  min-height: 100%;
+  min-width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#heading {
+  background-color: #a683e3;
+  text-align: center;
+  color: white;
+  margin-bottom: 20px;
+  font-family: "Dancing Script", "Reggae One";
 }
 
 .authentication-form {
@@ -240,7 +310,8 @@ footer {
 }
 
 @media (max-width: 870px) {
-  .authentication-form,#homepage {
+  .authentication-form,
+  #homepage {
     border: 10px double white;
   }
   .card {
@@ -274,48 +345,41 @@ footer {
   width: 100%;
   border: 50px double white;
   box-sizing: border-box;
-  display:flex;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #675686;
   background-image: url("https://www.transparenttextures.com/patterns/food.png");
-/* background-color: #675686;
+  /* background-color: #675686;
 background-image: url("https://www.transparenttextures.com/patterns/basketball.png"); */
-/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+  /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 }
 
-#homepage-text{
-  color:White;
-  margin:70px;
-    background-color:#675686;
+#homepage-text {
+  color: White;
+  margin: 70px;
+  background-color: #675686;
 
-    padding:20px
-
+  padding: 20px;
 }
 
-#homepage-text div{
+#homepage-text div {
   font-weight: bold;
   text-align: center;
 }
 
 #welcome {
-  font-family:Sofia, satisfy, cursive;
-  font-size:2em;
+  font-family: Sofia, satisfy, cursive;
+  font-size: 2em;
 }
 
-#to{
-  font-family:"Reggae One", "Dancing Script";
-  font-size:1em;
+#to {
+  font-family: "Reggae One", "Dancing Script";
+  font-size: 1em;
 }
 
-#myToDoList{
-  font-family:"Dancing Script", "Reggae One";
-  font-size:2.5em;
-}
-
-#main-lists-page{
-  height: 100vh;
-  width: 100%;
-  background-color: #675686;
+#myToDoList {
+  font-family: "Dancing Script", "Reggae One";
+  font-size: 2.5em;
 }

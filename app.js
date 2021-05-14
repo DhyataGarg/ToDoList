@@ -165,10 +165,9 @@ app.get("/today", function (req, res) {
         res.redirect("/today");
       } else {
         lists.forEach((list) => {
-          // console.log(list);
           if (list.name === "Today") {
             res.render("list", {
-              listTitle: "Today",
+              listTitle: date(),
               userLists: lists,
               listItems: list.items,
             });
@@ -182,28 +181,42 @@ app.get("/today", function (req, res) {
 });
 
 // app.post("/today", function (req, res) {
+//   const user = req.user;
 //   const itemName = req.body.newItem;
 //   const listName = req.body.list;
-//   const item = new Item({
-//     name: itemName,
-//   });
 
-//   if (listName === date()) {
-//     item.save();
-//     res.redirect("/today");
-//   } else {
-//     List.findOne({ name: listName }, (err, foundList) => {
-//       foundList.items.push(item);
-//       foundList.save();
-//       res.redirect("/" + listName);
-//     });
-//   }
+//   const listInd = user.lists.findIndex((list) => list.name === listName);
+//   User.updateOne(
+//     { _id: req.user._id },
+//     {
+//       $push: {
+//         lists: [
+//           ...user.lists,
+//           {
+//             name: _.capitalize(listName.trim()),
+//             items: [...user.lists[listInd].items, { name: itemName }],
+//           },
+//         ],
+//       },
+//     },
+
+//     (err, result) => {
+//       if (err) {
+//         console.log(err);
+//       } else {
+//         console.log("Successfully updated");
+//       }
+//     }
+//   );
+//   console.log(user.lists[listInd]);
+
+//   res.redirect("/today");
 // });
 
 ///////////////////////////////***************************//////////////////////////////////
 
 // app.get("/:customListName", function (req, res) {
-//   const customListName = _.capitalize(req.params.customListName);
+//   const customListName = (req.params.customListName);
 
 //   List.findOne({ name: customListName }, (err, foundList) => {
 //     if (!err) {
@@ -228,7 +241,7 @@ app.get("/today", function (req, res) {
 
 ///////////////////////////////***************************//////////////////////////////////
 
-app.get("/newList", (req, res) => {
+app.get("/lists", (req, res) => {
   if (req.isAuthenticated()) {
     res.redirect("/today");
   } else {
@@ -236,52 +249,67 @@ app.get("/newList", (req, res) => {
   }
 });
 
-app.post("/newList", (req, res) => {
+app.post("/lists", (req, res) => {
   const newListName = req.body.newListName;
-  // const lists = req.user.lists;
   var listAlreadyExists = false;
 
   User.findById(req.user._id, (err, foundUser) => {
     foundUser.lists.forEach((list) => {
-      if (list.name == newListName) {
+      if (list.name == _.capitalize(newListName.trim())) {
         listAlreadyExists = true;
       }
     });
 
-    if (!listAlreadyExists) {
-      User.updateOne(
-        { _id: req.user._id },
-        {
-          $push: {
-            lists: { name: newListName, items: defaultItems },
+    if (newListName.trim().length > 0) {
+      if (!listAlreadyExists) {
+        User.updateOne(
+          { _id: req.user._id },
+          {
+            $push: {
+              lists: {
+                name: _.capitalize(newListName.trim()),
+                items: defaultItems,
+              },
+            },
           },
-        },
-        function (err, result) {
-          if (err) {
-            res.send(err);
-          } else {
-            console.log("Successfully added the list.");
+          function (err, result) {
+            if (err) {
+              res.send(err);
+            } else {
+              console.log("Successfully added the list.");
+            }
           }
-        }
-      );
+        );
+      }
+
+      setTimeout(() => {
+        res.redirect(`/lists/${_.capitalize(newListName.trim())}`);
+      }, 1000);
+    } else {
+      res.redirect("/today");
     }
-    res.redirect(`/newList/${newListName}`);
   });
 });
 
 ///////////////////////////////***************************//////////////////////////////////
 
-app.get("/newList/:listName", (req, res) => {
+app.get("/lists/:listName", (req, res) => {
   if (req.isAuthenticated()) {
     const lists = req.user.lists;
-    console.log("req list is" + req.params.listName);
     const foundList = lists.find((list) => list.name === req.params.listName);
-    console.log("foundList = " + foundList);
-    res.render("list", {
-      listTitle: foundList.name,
-      userLists: lists,
-      listItems: foundList.items,
-    });
+    if (foundList.name === "Today") {
+      res.render("list", {
+        listTitle: date(),
+        userLists: lists,
+        listItems: foundList.items,
+      });
+    } else {
+      res.render("list", {
+        listTitle: foundList.name,
+        userLists: lists,
+        listItems: foundList.items,
+      });
+    }
     // });
   } else {
     res.redirect("/login");
