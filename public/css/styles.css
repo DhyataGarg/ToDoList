@@ -5,6 +5,10 @@
   font-family: "helvetica neue";
 } */
 
+/* * {
+  border: 1px solid black;
+} */
+
 body {
   /* min-height: 100%;
   background-color: transparent; */
@@ -13,16 +17,6 @@ body {
   justify-content: center;
   align-items: center;
 }
-
-button{
-  border:none;
-  outline:none
-}
-
-/* h1 {
-  color: #fff;
-  padding: 10px;
-} */
 
 .item {
   min-height: 70px;
@@ -52,11 +46,6 @@ p {
   color: #00204a;
 }
 
-form.item {
-  text-align: center;
-  margin-left: 20px;
-}
-
 button.addNewItem,
 #newListForm > button {
   min-height: 50px;
@@ -69,6 +58,7 @@ button.addNewItem,
   padding-bottom: 6px;
   text-align: center;
   border-width: 0;
+  outline: none;
 }
 
 #addNewItem {
@@ -100,23 +90,25 @@ footer {
 }
 
 #main-lists-page {
+  background-color: #a683e3;
+  background-image: url("https://www.transparenttextures.com/patterns/diagmonds.png");
   max-height: 100vh;
   width: 100%;
-  background-color: #675686;
   display: flex;
   justify-content: space-between;
 }
 
 #all-lists-section {
   background-color: white;
-  min-width: 20%;
+  min-width: 25%;
   min-height: 100vh;
 }
 
 .listsMenuBar {
-  min-height: 90vh;
-  max-height: 90vh;
-  min-width: 20%;
+  min-height: 77vh;
+  max-height: 77vh;
+  top: 13vh;
+  min-width: 25%;
   background-color: white;
   box-shadow: 0 12px 18px rgba(0, 0, 0, 0.26);
   display: flex;
@@ -136,8 +128,8 @@ footer {
   border: none;
   outline: none;
   font-family: "Reggae One", "Dancing Script";
-  color:#675686;
-  text-align:center;
+  color: #675686;
+  text-align: center;
 }
 
 .listsMenuBar > a:active {
@@ -146,9 +138,10 @@ footer {
 }
 
 #newListForm {
-  z-index: 1;
+  display: flex;
+  justify-content: space-around;
   position: fixed;
-  width: 20%;
+  width: 25%;
   margin-top: 90vh;
 }
 
@@ -160,59 +153,109 @@ footer {
   background: transparent;
   font-size: 20px;
   font-weight: 200;
-  width: 75%;
+  /* width: 75%; */
+}
+
+#open-list-section {
+  min-height: 100vh;
+  min-width: 75%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* margin-top: 13vh; */
 }
 
 .box {
   min-width: 400px;
   max-width: 400px;
-  /* margin: 50px auto; */
   background: white;
   border-radius: 5px;
   box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
-  overflow-y: auto;
-}
-
-#open-list-section {
-  min-height: 100%;
-  min-width: 80%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
 #heading {
+  max-height: 70px;
   background-color: #a683e3;
+  margin-top: 5px;
+  /* top: 17vh; */
   text-align: center;
   color: white;
+  margin-top: 10px;
   margin-bottom: 20px;
   font-family: "Dancing Script", "Reggae One";
 }
 
+#display-list-items {
+  min-height: 400px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+form.item {
+  display: flex;
+  justify-content: space-around;
+  background-color: white;
+  position: fixed;
+  margin-top: 88vh;
+  text-align: center;
+  min-width: 400px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
 .authentication-form {
+  /* #009688 */
+  /* #60f6e4 */
+  /* #00bcd4 */
   width: 100%;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 50px double white;
+  border: 10px double white;
   box-sizing: border-box;
   background-color: #a683e3;
   background-image: url("https://www.transparenttextures.com/patterns/diagmonds.png");
+  /* z-index: -2; */
 }
 
 .card {
   max-height: 90%;
   width: 40%;
   background-color: white;
-  /* border-radius: 12px; */
-  box-shadow: 0 12px 18px rgba(0, 0, 0, 0.26);
+  /* border-radius: 12px;  */
+  /* box-shadow: 0 12px 18px rgba(0, 0, 0, 0.26);  */
   margin-left: auto;
   margin-right: auto;
   padding: 2rem;
   overflow-y: auto;
+  /* position: relative; */
+  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(97, 81, 81, 0.072),
+    0 41.8px 33.4px rgba(0, 0, 0, 0.086), 0 100px 80px rgba(0, 0, 0, 0.12);
 }
+/* .card:after {
+  z-index: -1;
+  position: absolute;
+  content: "";
+  bottom: 15px;
+  right: 10px;
+  left: auto;
+  width: 50%;
+  top: 80%;
+  max-width: 300px;
+  background: #777;
+  -webkit-box-shadow: 0 15px 10px #777;
+  -moz-box-shadow: 0 15px 10px #777;
+  box-shadow: 0 15px 10px #777;
+  -webkit-transform: rotate(3deg);
+  -moz-transform: rotate(3deg);
+  -o-transform: rotate(3deg);
+  -ms-transform: rotate(3deg);
+  transform: rotate(3deg);
+} */
 
 /* width */
 ::-webkit-scrollbar {
@@ -293,27 +336,21 @@ footer {
   background-color: #675686;
   color: white;
   font-size: 1.5rem;
+  outline: none;
 }
 
 .control button:active {
   box-shadow: none;
   border: none;
 }
-
+/* 
 @media (max-width: 1100px) {
-  .authentication-form {
-    border: 30px double white;
-  }
   .card {
     width: 60%;
   }
-}
+} */
 
-@media (max-width: 870px) {
-  .authentication-form,
-  #homepage {
-    border: 10px double white;
-  }
+@media (max-width: 1100px) {
   .card {
     width: 75%;
   }
@@ -322,16 +359,23 @@ footer {
 @media (max-width: 600px) {
   .card {
     width: 90%;
-    max-height: 80%;
+    height: auto;
+    padding: 1rem;
   }
 
   .myToDOListHeading {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 
   .control {
     flex-direction: column;
     align-items: flex-start;
+    margin: 0.5rem 0;
+  }
+
+  .control button {
+    min-width: 180px;
+    min-height: 40px;
   }
 
   .control > label,
@@ -343,7 +387,7 @@ footer {
 #homepage {
   height: 100vh;
   width: 100%;
-  border: 50px double white;
+  border: 10px double white;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -382,4 +426,44 @@ background-image: url("https://www.transparenttextures.com/patterns/basketball.p
 #myToDoList {
   font-family: "Dancing Script", "Reggae One";
   font-size: 2.5em;
+}
+
+#app-header {
+  border: 1px solid black;
+  min-width: 100%;
+  height: 80px;
+  background-color: white;
+  position: fixed;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 10px;
+}
+
+#logo-heading {
+  color: #675686;
+  margin: 10px;
+}
+
+#header-logout-button {
+  min-width: 150px;
+  max-height: 70px;
+  border-radius: 40px;
+  box-shadow: 0 1rem 1rem rgb(0 0 0 / 18%);
+  border: none;
+  background-color: #675686;
+  color: white;
+  font-size: 1.5rem;
+  outline: none;
+}
+
+#searchBox {
+  width: 600px;
+  height: 50px;
+  text-align: center;
+  color: #675686;
+  font-size: 1.5em;
+  border: 1px solid #675686;
+  outline: #675686;
 }

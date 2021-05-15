@@ -109,7 +109,7 @@ app.post("/signup", function (req, res) {
         res.redirect("/500");
       } else {
         passport.authenticate("local")(req, res, () => {
-          res.redirect("/today");
+          res.redirect("/lists/today");
         });
       }
     }
@@ -132,7 +132,7 @@ app.post("/login", (req, res) => {
       console.log(err);
     } else {
       passport.authenticate("local")(req, res, () => {
-        res.redirect("/today");
+        res.redirect("/lists/today");
       });
     }
   });
@@ -140,7 +140,7 @@ app.post("/login", (req, res) => {
 
 ///////////////////////////////***************************//////////////////////////////////
 
-app.get("/today", function (req, res) {
+app.get("/lists/today", function (req, res) {
   if (req.isAuthenticated()) {
     const user = req.user;
 
@@ -162,88 +162,56 @@ app.get("/today", function (req, res) {
             }
           }
         );
-        res.redirect("/today");
+        res.redirect("/lists/today");
       } else {
-        lists.forEach((list) => {
-          if (list.name === "Today") {
-            res.render("list", {
-              listTitle: date(),
-              userLists: lists,
-              listItems: list.items,
-            });
-          }
+        // lists.forEach((list) => {
+        // if (list.name === "Today") {
+        res.render("list", {
+          listName: "Today",
+          listTitle: date(),
+          userLists: lists,
+          listItems: lists[0].items,
         });
       }
+      // });
+      // }
     });
   } else {
     res.redirect("/login");
   }
 });
 
-// app.post("/today", function (req, res) {
-//   const user = req.user;
-//   const itemName = req.body.newItem;
-//   const listName = req.body.list;
+app.post("/lists/today", function (req, res) {
+  const user = req.user;
+  const itemName = req.body.newItem;
+  const listName = _.capitalize(req.body.list);
 
-//   const listInd = user.lists.findIndex((list) => list.name === listName);
-//   User.updateOne(
-//     { _id: req.user._id },
-//     {
-//       $push: {
-//         lists: [
-//           ...user.lists,
-//           {
-//             name: _.capitalize(listName.trim()),
-//             items: [...user.lists[listInd].items, { name: itemName }],
-//           },
-//         ],
-//       },
-//     },
-
-//     (err, result) => {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         console.log("Successfully updated");
-//       }
-//     }
-//   );
-//   console.log(user.lists[listInd]);
-
-//   res.redirect("/today");
-// });
-
-///////////////////////////////***************************//////////////////////////////////
-
-// app.get("/:customListName", function (req, res) {
-//   const customListName = (req.params.customListName);
-
-//   List.findOne({ name: customListName }, (err, foundList) => {
-//     if (!err) {
-//       if (!foundList) {
-//         //Create a new list
-//         const list = new List({
-//           name: customListName,
-//           items: defaultItems,
-//         });
-//         list.save();
-//         res.redirect("/" + customListName);
-//       } else {
-//         //Show an existing list
-//         res.render("list", {
-//           listTitle: foundList.name,
-//           newListItems: foundList.items,
-//         });
-//       }
-//     }
-//   });
-// });
+  if (itemName.trim().length > 0) {
+    User.updateOne(
+      { _id: req.user._id },
+      {
+        $push: { "lists.$[list].items": { name: itemName } },
+      },
+      {
+        arrayFilters: [{ "list.name": { $eq: listName } }],
+      },
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Successfully updated");
+        }
+      }
+    );
+  }
+  res.redirect(`/lists/${listName}`);
+});
 
 ///////////////////////////////***************************//////////////////////////////////
 
 app.get("/lists", (req, res) => {
   if (req.isAuthenticated()) {
-    res.redirect("/today");
+    res.redirect("/lists/today");
   } else {
     res.redirect("/login");
   }
@@ -286,7 +254,7 @@ app.post("/lists", (req, res) => {
         res.redirect(`/lists/${_.capitalize(newListName.trim())}`);
       }, 1000);
     } else {
-      res.redirect("/today");
+      res.redirect("/lists/today");
     }
   });
 });
@@ -297,20 +265,43 @@ app.get("/lists/:listName", (req, res) => {
   if (req.isAuthenticated()) {
     const lists = req.user.lists;
     const foundList = lists.find((list) => list.name === req.params.listName);
-    if (foundList.name === "Today") {
-      res.render("list", {
-        listTitle: date(),
-        userLists: lists,
-        listItems: foundList.items,
-      });
+    console.log(foundList);
+
+    if (!foundList) {
+      console.log("No list found.");
+      res.redirect(`/lists/Today`);
+    } else if (foundList.items.length === 0) {
+      User.updateOne(
+        { _id: req.user._id },
+        {
+          $pull: { lists: { name: foundList.name } },
+        },
+        function (err, result) {
+          if (err) {
+            res.send(err);
+          } else {
+            console.log("Successfully modified.");
+          }
+        }
+      );
+      res.redirect("/lists/Today");
     } else {
-      res.render("list", {
-        listTitle: foundList.name,
-        userLists: lists,
-        listItems: foundList.items,
-      });
+      if (_.capitalize(foundList.name) === "Today") {
+        res.render("list", {
+          listName: "Today",
+          listTitle: date(),
+          userLists: lists,
+          listItems: foundList.items,
+        });
+      } else {
+        res.render("list", {
+          listName: foundList.name,
+          listTitle: foundList.name,
+          userLists: lists,
+          listItems: foundList.items,
+        });
+      }
     }
-    // });
   } else {
     res.redirect("/login");
   }
@@ -318,31 +309,41 @@ app.get("/lists/:listName", (req, res) => {
 
 ///////////////////////////////***************************//////////////////////////////////
 
-// app.post("/delete", (req, res) => {
-//   const checkedItemId = req.body.checkbox;
-//   const listName = req.body.listName;
+app.post("/search", (req, res) => {
+  const searchList = _.capitalize(req.body.searchList).trim();
+  res.redirect(`/lists/${searchList}`);
+});
 
-//   if (listName === date()) {
-//     Item.findByIdAndRemove(checkedItemId, (err) => {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         console.log("Successfully deleted.");
-//       }
-//     });
-//     res.redirect("/Today");
-//   } else {
-//     List.findOneAndUpdate(
-//       { name: listName },
-//       { $pull: { items: { _id: checkedItemId } } },
-//       (err, foundList) => {
-//         if (!err) {
-//           res.redirect("/" + listName);
-//         }
-//       }
-//     );
-//   }
-// });
+///////////////////////////////***************************//////////////////////////////////
+
+app.post("/delete", (req, res) => {
+  const checkedItemId = req.body.checkbox;
+  const listName = req.body.listName;
+
+  User.updateOne(
+    { _id: req.user._id },
+    {
+      $pull: { "lists.$[list].items": { _id: checkedItemId } },
+    },
+    {
+      arrayFilters: [{ "list.name": { $eq: listName } }],
+    },
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Successfully deleted");
+      }
+    }
+  ).then(res.redirect(`/lists/${listName}`));
+});
+
+///////////////////////////////***************************//////////////////////////////////
+app.post("/logout", (req, res) => {
+  req.logout();
+  req.session.destroy();
+  res.redirect("/");
+});
 
 ///////////////////////////////***************************//////////////////////////////////
 
