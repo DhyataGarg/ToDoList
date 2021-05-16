@@ -320,22 +320,25 @@ app.post("/delete", (req, res) => {
   const checkedItemId = req.body.checkbox;
   const listName = req.body.listName;
 
-  User.updateOne(
-    { _id: req.user._id },
-    {
-      $pull: { "lists.$[list].items": { _id: checkedItemId } },
-    },
-    {
-      arrayFilters: [{ "list.name": { $eq: listName } }],
-    },
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("Successfully deleted");
+  async function deleteUser() {
+    User.updateOne(
+      { _id: req.user._id },
+      {
+        $pull: { "lists.$[list].items": { _id: checkedItemId } },
+      },
+      {
+        arrayFilters: [{ "list.name": { $eq: listName } }],
+      },
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Successfully deleted");
+        }
       }
-    }
-  ).then(res.redirect(`/lists/${listName}`));
+    );
+  }
+  deleteUser().then(res.redirect(`/lists/${listName}`));
 });
 
 ///////////////////////////////***************************//////////////////////////////////

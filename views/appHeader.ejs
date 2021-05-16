@@ -6,4 +6,26 @@
   <form action="/logout" method="POST">
     <button id="header-logout-button">Logout</button>
   </form>
+
+  <div class="btn-group dropleft">
+    <button
+      class="btn"
+      type="button"
+      id="dropdownMenuButton"
+      data-toggle="dropdown"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="dropdown-menu">
+      <!-- <a class="dropdown-item" href="#">Action</a>
+      <a class="dropdown-item" href="#">Another action</a>
+      <a class="dropdown-item" href="#">Something else here</a> -->
+      <form action="/logout" class="dropdown-item" method="POST">
+        <button class="dropdown-btn">Logout</button>
+      </form>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,305 @@
+#main-lists-page {
+  background-color: #a683e3;
+  background-image: url("https://www.transparenttextures.com/patterns/diagmonds.png");
+  height: 87vh;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  overflow-x: hidden;
+  /* overflow: hidden; */
+}
+
+.sidebar {
+  min-height: 87vh;
+  max-height: 87vh;
+  background-color: white;
+  box-shadow: 0 12px 18px rgba(0, 0, 0, 0.26);
+  width: 300px;
+  z-index: 1;
+  overflow-x: hidden;
+  transition: 0.5s;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#lists-heading {
+  margin: 2px;
+  box-shadow: 0 12px 18px rgba(0, 0, 0, 0.16);
+  padding: 5px;
+  width: 100%;
+  background-color: transparent;
+  font-family: "Reggae One", "Dancing Script";
+  color: #675686;
+}
+
+#lists-heading > p {
+  font-size: 2em;
+  text-align: center;
+  transition: 0.3s;
+  margin-top: -40px;
+}
+
+.sidebar #all-lists-names {
+  width: 100%;
+  max-height: 800px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.sidebar #closebtn {
+  text-decoration: none;
+  color: #675686;
+  position: relative;
+  left: 90%;
+  top: -20px;
+  font-size: 36px;
+  height: auto;
+  width: auto;
+  box-shadow: none;
+}
+
+.sidebar #all-lists-names a {
+  margin: 2px;
+  box-shadow: 0 12px 18px rgba(0, 0, 0, 0.16);
+  padding: 10px;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-family: "Reggae One", "Dancing Script";
+  color: #675686;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.sidebar > a:active {
+  box-shadow: none;
+  border: none;
+}
+
+#newListForm {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: sticky;
+  top: 90%;
+}
+
+#newListForm > input {
+  width: 170px;
+  text-align: center;
+  height: 60px;
+  top: 10px;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  font-weight: 200;
+}
+
+#newListForm > input:focus {
+  outline: none;
+  box-shadow: inset 0 -3px 0 0 #a683e3;
+}
+
+button.addNewItem,
+#newListForm > button {
+  min-width: 50px;
+  min-height: 50px;
+  max-height: 50px;
+  max-width: 50px;
+  border-radius: 50%;
+  border-color: transparent;
+  background-color: #a683e3;
+  color: #fff;
+  font-size: 30px;
+  /* padding-bottom: 6px; */
+  text-align: center;
+  border-width: 0;
+  outline: none;
+}
+
+.openbtn {
+  font-size: 3em;
+  cursor: pointer;
+  background-color: transparent;
+  color: white;
+  border: none;
+  outline: none;
+  position: absolute;
+  left: 2%;
+  top: 16%;
+}
+
+#open-list-section {
+  /* border: 1px solid black; */
+  min-height: 77vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  transition: margin-left 0.5s;
+  /* padding: 16px; */
+}
+
+@media screen and (max-height: 450px) {
+  .sidebar a {
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  #lists-heading > p {
+    font-size: 1em;
+    text-align: center;
+    transition: 0.3s;
+    margin-top: -40px;
+    font-weight: bolder;
+  }
+
+  .box {
+    width: 90%;
+  }
+
+  .sidebar #closebtn {
+    left: 85%;
+  }
+
+  #newListForm > button {
+    min-width: 40px;
+    min-height: 40px;
+    max-height: 50px;
+    max-width: 50px;
+  }
+
+  #newListForm > input {
+    width: 150px;
+  }
+}
+
+@media screen and (max-width: 632px) {
+  .sidebar {
+    position: fixed;
+    width: 0;
+  }
+
+  .openbtn {
+    font-size: 2em;
+  }
+
+  .box {
+    max-width: 90%;
+  }
+
+  #addNewItem {
+    font-size: 15px;
+    /* width: 50%; */
+  }
+
+  form.item {
+    justify-content: none;
+    width: 100%;
+  }
+}
+
+.box {
+  width: 400px;
+  /* max-width: 400px; */
+  background: white;
+  border-radius: 5px;
+  box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
+}
+
+#heading {
+  max-height: 70px;
+  background-color: #a683e3;
+  /* margin-top: 5px; */
+  /* top: 17vh; */
+  text-align: center;
+  color: white;
+  /* margin-top: 10px; */
+  margin-bottom: 20px;
+  font-family: "Dancing Script", "Reggae One";
+}
+
+#display-list-items {
+  min-height: 83.5%;
+  max-height: 60vh;
+  overflow-y: hidden;
+}
+
+#showAllItems {
+  /* border: 1px solid black; */
+  min-width: 100%;
+  height: 85%;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+form.item {
+  display: flex;
+  justify-content: space-around;
+  background-color: white;
+  text-align: center;
+  width: 100%;
+}
+
+#addNewItem {
+  text-align: center;
+  height: 60px;
+  top: 10px;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  font-weight: 200;
+  width: 70%;
+}
+
+#addNewItem:focus,
+#newListForm > input:focus {
+  outline: none;
+  box-shadow: inset 0 -3px 0 0 #a683e3;
+}
+
+::placeholder {
+  color: grey;
+  opacity: 1;
+}
+
+footer {
+  color: white;
+  color: rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.item {
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.item:last-child {
+  border-bottom: 0;
+}
+
+input:checked + p {
+  text-decoration: line-through;
+  text-decoration-color: #a683e3;
+}
+
+input[type="checkbox"] {
+  margin: 20px;
+}
+
+p {
+  margin: 0;
+  padding: 20px;
+  font-size: 20px;
+  font-weight: 200;
+  color: #00204a;
+}

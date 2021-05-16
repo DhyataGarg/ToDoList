@@ -1,8 +1,11 @@
 <%- include("header") -%> <%- include("appHeader") -%>
-
 <div id="main-lists-page">
-  <section id="all-lists-section">
-    <div class="listsMenuBar">
+  <div id="mySidebar" class="sidebar">
+    <div id="lists-heading">
+      <a href="javascript:void(0)" id="closebtn" onclick="closeNav()">×</a>
+      <p>My Lists</p>
+    </div>
+    <div id="all-lists-names">
       <% userLists.forEach(list => { %>
 
       <a href="<%= '/lists/' + list.name %>" role="button">
@@ -15,46 +18,57 @@
       <input placeholder="Make a new list" name="newListName" />
       <button type="submit">+</button>
     </form>
-  </section>
+  </div>
 
-  <section id="open-list-section">
+  <div id="open-list-section">
+    <button class="openbtn" onclick="openNav()">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+
     <div class="box" id="heading">
       <h1><%= listTitle %></h1>
     </div>
     <div class="box" id="display-list-items">
-      <% listItems.forEach((item) => { %>
-      <form action="/delete" method="POST">
-        <div class="item">
-          <input
-            type="checkbox"
-            name="checkbox"
-            value="<%= item._id %>"
-            onchange="this.form.submit()"
-          />
-          <p><%= item.name %></p>
-        </div>
-        <input type="hidden" name="listName" value="<%= listName %>" />
-      </form>
-      <% }) %>
-    </div>
+      <div id="showAllItems">
+        <% listItems.forEach((item) => { %>
+        <form action="/delete" method="POST">
+          <div class="item">
+            <input
+              type="checkbox"
+              name="checkbox"
+              value="<%= item._id %>"
+              onchange="this.form.submit()"
+            />
+            <p><%= item.name %></p>
+          </div>
+          <input type="hidden" name="listName" value="<%= listName %>" />
+        </form>
+        <% }) %>
+      </div>
 
-    <form action="/lists/today" method="POST" class="item">
-      <input
-        name="newItem"
-        type="text"
-        placeholder="New Item"
-        autocomplete="off"
-        id="addNewItem"
-      />
-      <button
-        class="addNewItem"
-        type="submit"
-        name="list"
-        value="<%= listName %>"
+      <form
+        action="/lists/today"
+        method="POST"
+        class="item"
+        id="addNewItemForm"
       >
-        +
-      </button>
-    </form>
-  </section>
+        <input
+          name="newItem"
+          type="text"
+          placeholder="New Item"
+          autocomplete="off"
+          id="addNewItem"
+        />
+        <button
+          class="addNewItem"
+          type="submit"
+          name="list"
+          value="<%= listName %>"
+        >
+          +
+        </button>
+      </form>
+    </div>
+  </div>
 </div>
 <%- include("footer") -%>
