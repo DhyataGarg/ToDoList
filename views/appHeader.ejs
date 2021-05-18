@@ -20,11 +20,18 @@
     </button>
 
     <div class="dropdown-menu">
-      <!-- <a class="dropdown-item" href="#">Action</a>
-      <a class="dropdown-item" href="#">Another action</a>
-      <a class="dropdown-item" href="#">Something else here</a> -->
-      <form action="/logout" class="dropdown-item" method="POST">
+      <form
+        action="/logout"
+        class="dropdown-item"
+        id="dropdownLogoutButton"
+        method="POST"
+      >
         <button class="dropdown-btn">Logout</button>
+      </form>
+      <form action="/deleteAccount" class="dropdown-item" method="POST">
+        <button class="dropdown-btn" id="deleteAccountButton">
+          Delete Account
+        </button>
       </form>
     </div>
   </div>

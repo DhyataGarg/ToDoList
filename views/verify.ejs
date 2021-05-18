@@ -1,0 +1,24 @@
+<%- include("header") -%>
+
+<div class="authentication-form">
+  <form class="card" action="/signup" method="POST">
+    <h1 class="myToDOListHeading">My ToDoList</h1>
+    <h3 id="verify-heading">Verify Email</h3>
+    <p id="otp-text">An OTP is sent to <%= username %>. Please enter the OTP to Verify your email.</p>    
+    <div class="control hiddenCredentials">
+      <label>E-mail</label>
+      <input type="email" name="username" value="<%= username %>" />
+    </div>
+    <div class="control hiddenCredentials">
+      <label>Password</label>
+      <input type="password" name="password" value="<%= password %>" />
+    </div>
+
+    <div class="control">
+      <input type="number" name="OTP" minlength="4" maxlength="4" />
+    </div>
+    <div class="control"><button type="submit">Verify</button></div>
+  </form>
+</div>
+
+<%- include("footer") -%>

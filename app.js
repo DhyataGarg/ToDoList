@@ -8,14 +8,28 @@ const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const cors = require("cors");
+const sendEmail = require("./utils/sendEmail.js");
+const otpGenerator = require("./utils/otpGenerator");
 
-///////////////////////////////***************************//////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+let otp = 0;
+let userDetails = {};
 
 const app = express();
 app.use(express.static("public"));
 app.set("view engine", "ejs");
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+mongoose.set("useFindAndModify", false);
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 
 app.use(
   session({
@@ -28,16 +42,19 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-///////////////////////////////***************************//////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-mongoose.connect("mongodb://localhost:27017/mytodolistDB", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(
+  `mongodb+srv://${process.env.MONGO_USER_NAME}:${process.env.MONGO_PASSWORD}@mytodolist.yccci.mongodb.net/mytodolistDB`,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
 mongoose.set("useCreateIndex", true);
 
-///////////////////////////////***************************//////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const itemSchema = new mongoose.Schema({
   name: String,
@@ -57,19 +74,19 @@ const item3 = {
 
 const defaultItems = [item1, item2, item3];
 
-///////////////////////////////***************************//////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const listSchema = new mongoose.Schema({
   name: String,
   items: [itemSchema],
 });
 
-///////////////////////////////***************************//////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const userSchema = new mongoose.Schema({
-  username: String,
   firstName: String,
   lastName: String,
+  username: String,
   password: String,
   lists: [listSchema],
 });
@@ -83,40 +100,74 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-///////////////////////////////***************************//////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-app.get("/", (req, res) => {
-  res.render("homepage");
+app.post("/sendemail", (req, res) => {
+  (userDetails = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    username: req.body.username,
+    password: req.body.password,
+  }),
+    otp = otpGenerator();
+
+  const from = "dhyatagarg09@gmail.com";
+  const to = req.body.username;
+  const subject = "Verification for My ToDoList";
+  const output = `<p>Hello ${req.body.firstName} ${req.body.lastName}, Thank You for registering on <b>My ToDoList</b>.</p><p>Use <span style="font-weight: bold; color: red; font-size: 1.5rem;">${otp}</span> as OTP for Verifying your email ID.</p><p>This OTP is unique to you, so please do not share it to anyone else.</p><p></p><p></p><p></p><p>If you have not Registered on My ToDoList, then feel free to ignore this mail.</p>`;
+
+  // sendEmail(to, from, subject, output);
+  console.log(output)
+  res.redirect("/verify");
 });
 
-///////////////////////////////***************************//////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+app.get("/verify", (req, res) => {
+  res.render("verify", {
+    username: userDetails.username,
+    password: userDetails.password,
+  });
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+app.get("/", (req, res) => {
+  res.redirect("/signup");
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 app.get("/signup", (req, res) => {
   res.render("signup");
 });
 
 app.post("/signup", function (req, res) {
-  User.register(
-    {
-      firstName: req.body.userFirstName,
-      lastName: req.body.userLastName,
-      username: req.body.username,
-    },
-    req.body.password,
-    (err, user) => {
-      if (err) {
-        console.log(`User Registration Through Passport Error: \n\t${err}`);
-        res.redirect("/500");
-      } else {
-        passport.authenticate("local")(req, res, () => {
-          res.redirect("/lists/today");
-        });
+  if (req.body.OTP == otp) {
+    User.register(
+      {
+        firstName: userDetails.firstName,
+        lastName: userDetails.lastName,
+        username: req.body.username,
+      },
+      req.body.password,
+      (err, user) => {
+        if (err) {
+          console.log(`User Registration Through Passport Error: \n\t${err}`);
+          res.redirect("/500");
+        } else {
+          passport.authenticate("local")(req, res, () => {
+            res.redirect("/lists/today");
+          });
+        }
       }
-    }
-  );
+    );
+  } else {
+    console.log("Wrong OTP");
+  }
 });
 
-///////////////////////////////***************************//////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 app.get("/login", (req, res) => {
   res.render("login");
@@ -138,14 +189,14 @@ app.post("/login", (req, res) => {
   });
 });
 
-///////////////////////////////***************************//////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 app.get("/lists/today", function (req, res) {
   if (req.isAuthenticated()) {
     const user = req.user;
 
     User.findById(user._id).then((result) => {
-      const lists = user.lists;
+      var lists = user.lists;
       if (lists.length === 0) {
         User.updateOne(
           { _id: user._id },
@@ -164,8 +215,6 @@ app.get("/lists/today", function (req, res) {
         );
         res.redirect("/lists/today");
       } else {
-        // lists.forEach((list) => {
-        // if (list.name === "Today") {
         res.render("list", {
           listName: "Today",
           listTitle: date(),
@@ -173,8 +222,6 @@ app.get("/lists/today", function (req, res) {
           listItems: lists[0].items,
         });
       }
-      // });
-      // }
     });
   } else {
     res.redirect("/login");
@@ -198,8 +245,6 @@ app.post("/lists/today", function (req, res) {
       (err, result) => {
         if (err) {
           console.log(err);
-        } else {
-          console.log("Successfully updated");
         }
       }
     );
@@ -207,7 +252,7 @@ app.post("/lists/today", function (req, res) {
   res.redirect(`/lists/${listName}`);
 });
 
-///////////////////////////////***************************//////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 app.get("/lists", (req, res) => {
   if (req.isAuthenticated()) {
@@ -243,8 +288,6 @@ app.post("/lists", (req, res) => {
           function (err, result) {
             if (err) {
               res.send(err);
-            } else {
-              console.log("Successfully added the list.");
             }
           }
         );
@@ -259,16 +302,14 @@ app.post("/lists", (req, res) => {
   });
 });
 
-///////////////////////////////***************************//////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 app.get("/lists/:listName", (req, res) => {
   if (req.isAuthenticated()) {
     const lists = req.user.lists;
     const foundList = lists.find((list) => list.name === req.params.listName);
-    console.log(foundList);
 
     if (!foundList) {
-      console.log("No list found.");
       res.redirect(`/lists/Today`);
     } else if (foundList.items.length === 0) {
       User.updateOne(
@@ -279,8 +320,6 @@ app.get("/lists/:listName", (req, res) => {
         function (err, result) {
           if (err) {
             res.send(err);
-          } else {
-            console.log("Successfully modified.");
           }
         }
       );
@@ -307,55 +346,70 @@ app.get("/lists/:listName", (req, res) => {
   }
 });
 
-///////////////////////////////***************************//////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 app.post("/search", (req, res) => {
   const searchList = _.capitalize(req.body.searchList).trim();
   res.redirect(`/lists/${searchList}`);
 });
 
-///////////////////////////////***************************//////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 app.post("/delete", (req, res) => {
   const checkedItemId = req.body.checkbox;
   const listName = req.body.listName;
 
-  async function deleteUser() {
-    User.updateOne(
-      { _id: req.user._id },
-      {
-        $pull: { "lists.$[list].items": { _id: checkedItemId } },
-      },
-      {
-        arrayFilters: [{ "list.name": { $eq: listName } }],
-      },
-      (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log("Successfully deleted");
-        }
+  User.updateOne(
+    { _id: req.user._id },
+    {
+      $pull: { "lists.$[list].items": { _id: checkedItemId } },
+    },
+    {
+      arrayFilters: [{ "list.name": { $eq: listName } }],
+    },
+    (err, result) => {
+      if (err) {
+        console.log(err);
       }
-    );
-  }
-  deleteUser().then(res.redirect(`/lists/${listName}`));
+    }
+  );
+  setTimeout(() => {
+    res.redirect(`/lists/${listName}`);
+  }, 250);
 });
 
-///////////////////////////////***************************//////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+app.post("/deleteAccount", (req, res) => {
+  async function deleteUser() {
+    User.findByIdAndRemove(req.user._id, function (err, docs) {
+      if (err) {
+        console.log(err);
+      }
+    });
+  }
+  deleteUser().then(res.redirect(`/`));
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 app.post("/logout", (req, res) => {
   req.logout();
   req.session.destroy();
-  res.redirect("/");
+  res.redirect("/login");
 });
 
-///////////////////////////////***************************//////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 app.get("/about", function (req, res) {
   res.render("about");
 });
 
-///////////////////////////////***************************//////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-app.listen(3000, function () {
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, function () {
   console.log("Server is running at port 3000.");
 });
+
+
