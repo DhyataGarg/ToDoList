@@ -116,7 +116,7 @@ app.post("/sendemail", (req, res) => {
   const subject = "Verification for My ToDoList";
   const output = `<p>Hello ${req.body.firstName} ${req.body.lastName}, Thank You for registering on <b>My ToDoList</b>.</p><p>Use <span style="font-weight: bold; color: red; font-size: 1.5rem;">${otp}</span> as OTP for Verifying your email ID.</p><p>This OTP is unique to you, so please do not share it to anyone else.</p><p></p><p></p><p></p><p>If you have not Registered on My ToDoList, then feel free to ignore this mail.</p>`;
 
-  // sendEmail(to, from, subject, output);
+  sendEmail(to, from, subject, output);
   console.log(output)
   res.redirect("/verify");
 });
