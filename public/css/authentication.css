@@ -97,7 +97,6 @@
   text-align: center;
 }
 
-
 input[name=OTP]{
   width:100%;
   text-align:center
@@ -111,7 +110,7 @@ input[name=OTP]{
 
 @media (max-width: 600px) {
   .card {
-    width: 90%;
+    width: 85%;
     height: auto;
     padding: 1rem;
   }
