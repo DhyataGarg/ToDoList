@@ -155,8 +155,7 @@ app.post("/signup", function (req, res) {
       }
     );
   } else {
-    console.log("Wrong OTP");
-  }
+res.send('<script>alert("Wrong OTP")</script>')  }
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

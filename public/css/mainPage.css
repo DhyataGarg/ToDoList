@@ -4,7 +4,6 @@
   height: 87vh;
   width: 100%;
   display: flex;
-  justify-content: space-between;
   overflow-x: hidden;
   overflow: hidden;
 }
@@ -291,5 +290,9 @@ p {
   form.item {
     justify-content: none;
     width: 100%;
+  }
+
+  #heading h1{
+    font-size:2em
   }
 }
